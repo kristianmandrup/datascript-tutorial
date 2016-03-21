@@ -1,4 +1,5 @@
 Intro.md
+Architecture.md
 Create Schema.md
 Identity.md
 Create Database.md

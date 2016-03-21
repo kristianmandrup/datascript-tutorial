@@ -1,6 +1,12 @@
 ## Entity identity
 
-[](http://docs.datomic.com/identity.html)
+### External keys
+
+All entities in a database have an *internal key*, the *entity id*. You can use `:db/unique` to define an attribute to represent an external key.
+An entity may have any number of external keys.
+External keys must be single attributes.
+
+[Datomic Identity](http://docs.datomic.com/identity.html)
 
 Datomic/Datascript provides a number of ways to model identity and uniqueness.
 
