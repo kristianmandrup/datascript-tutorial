@@ -1,6 +1,15 @@
-# Architecture
+# Datomic Architecture
 
-## Datomic Architecture
+## The players
+
+- Transactor
+- ...
+
+TODO: Show diagram(s)
+
+### Transactor
+
+...
 
 ### Partitions
 

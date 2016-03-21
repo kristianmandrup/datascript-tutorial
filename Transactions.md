@@ -68,14 +68,19 @@ If the entity in question has a unique identifier, you can specify the entity id
  :customer/status :active}
 ```
 
+Using temp IDs to connect entities.
+
 ```clojure
-[{:db/id #db/id[:db.part/user -1]
+[
+ {:db/id #db/id[:db.part/user -1]
   :person/name "Bob"
   :person/spouse #db/id[:db.part/user -2]}
  {:db/id #db/id[:db.part/user -2]
   :person/name "Alice"
   :person/spouse #db/id[:db.part/user -1]}]
 ```
+
+Here the `person/spouse` of Alice and Bob is used to reference each other using temp IDs (`-1`, `-2`) which are resolved to real entity IDs when the transaction is executed.
 
 ### Datascript transactions
 Datascript comes with the following API transaction methods:

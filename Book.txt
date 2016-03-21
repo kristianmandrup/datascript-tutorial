@@ -1,5 +1,8 @@
 Intro.md
-Architecture.md
+Datomic Architecture.md
+Datascript Architecture.md
+Datascript getting started.md
+Datomic getting started.md
 Create Schema.md
 Identity.md
 Create Database.md
