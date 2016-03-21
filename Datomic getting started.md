@@ -1,3 +1,3 @@
 # Datomic getting started
 
-TODO
+[datomic API](http://docs.datomic.com/clojure/#datomic.api)
