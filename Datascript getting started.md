@@ -9,7 +9,26 @@ There is also a lot of good [getting started guide](https://github.com/tonsky/da
 ## Clojure quick start
 
 ```
-[:require  ...
+```
+(ns reagent-test.core
+  (:require [datascript :as d]
+            ;; more libs...
+            ))
+
+
+;;; Creates a DataScript "connection" (an atom with the current DB value)
+(def conn (d/create-conn))
+
+;;; Add some data
+(d/transact! conn [{:db/id -1 :name "Bob" :age 30}
+                   {:db/id -2 :name "Sally" :age 25}])
+
+;;; Query to find peeps whose age is less than 18
+(def q-young '[:find ?n
+               :where
+               [?e :name ?n]
+               [?e :age ?a]
+               [(< ?a 18)]])
 ```
 
 ## Javascript quick start

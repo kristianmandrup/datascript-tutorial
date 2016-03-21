@@ -10,8 +10,3 @@ App examples in the wild
 Usage/integrations
 - [with reagent](https://gist.github.com/allgress/11348685)
 
-[Dato todomvc](https://github.com/datodev/datodomvc)
-[video](https://www.youtube.com/watch?v=7bAdBXfZtZU)
-
-[Dato](https://github.com/datodev/dato)
-[Dato rationale](https://github.com/datodev/dato#rationale)
