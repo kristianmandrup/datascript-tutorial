@@ -1,6 +1,7 @@
 ### Queries
 
 Queries are executed via `d/q`. It takes a quoted vector `'[...]` containing the query.
+
 A query is built up of the following parts:
 - `:find`
 - `:in` (optional: to pass query parameters)
@@ -19,6 +20,24 @@ The result is: `["Maksim" 45]`
 
 ;; => #{ ["Maksim" 45] }
 ```
+
+The symbol `_` can be used as a wildcard for the parts of the data pattern that you wish to ignore. You can also omit trailing values in a data pattern.Therefore, the previous query is equivalent to this next query, because we ignore the transaction part of the datoms.
+
+```clojure
+[:find ?e
+ :where [?e :person/name "Ridley Scott" _]]
+```
+
+Omitting the trailing `_`, it becomes:
+
+```clojure
+[:find ?e
+ :where [?e :person/name "Ridley Scott"]]
+```
+
+
+Learn more at:
+- [Basic queries](http://www.learndatalogtoday.org/chapter/1)
 
 ### Query parameters
 
@@ -45,6 +64,11 @@ See more on aggregation functions below.
 
 ;; => [4]
 ```
+
+You can learn more at:
+
+- [Parameterized queries](http://www.learndatalogtoday.org/chapter/3)
+
 
 ### Aggregation
 

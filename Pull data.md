@@ -1,4 +1,4 @@
-## Pull queries
+## Pull
 
 Datascript and Datomic both come with a special *Pull API* for pulling entity data at a more coarse grained level. The Pull API can be seen as a sort of *simple query* that is more batch oriented.
 
