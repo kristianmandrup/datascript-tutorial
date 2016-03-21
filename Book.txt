@@ -12,6 +12,7 @@ Pull data.md
 Time travel.md
 CRUD.md
 Todo example.md
+Javascript integration.md
 Mori integration.md
 Posh and Reagent.md
 Client-Server data sync.md
