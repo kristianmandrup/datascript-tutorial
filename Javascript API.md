@@ -4,33 +4,29 @@ DataScript has a dedicated [public JavaScript API]([js public API](https://githu
 
 Some [test usage examples](https://github.com/tonsky/datascript/blob/master/test/js/tests.js#L101)
 
-For proper use of Datascript in a javascript context, you really should be using it with immutable values if possible. One such option is to use [datascript-mori](https://github.com/typeetfunc/datascript-mori) which also contains some good usage examples:
-
-- [Cljs API usage](https://github.com/typeetfunc/datascript-mori/blob/master/release-js/test/onlyCljsApiUsage.spec.js)
-- [Js and Cljs API](https://github.com/typeetfunc/datascript-mori/blob/master/release-js/test/combineJsAndCljsApi.spec.js)
+For proper use of Datascript in a javascript context, you really should be using it with immutable values if possible. One such option is to use [datascript-mori](https://github.com/typeetfunc/datascript-mori) introduced in the [[Morin Integration]] chapter.
 
 ## Javascript public API
 We present the API in order of common use.
 The API can be divided roughly into the following groups.
 
 - Database
-- Filter DB
-- DB connections
+    - Filter DB
+    - Connections
 - Transactions (upsert)
-- Data queries
-- Data pull
-- Fetch entity data
+- Query
+    - Query data
+    - Pull data
+    - Fetch entity data
 - Listeners
 - Indexes
-
-*Miscellaneous (util)*
-- Datoms
-- Unique IDs
-- Temp IDs
+- IDs
+    - Temp IDs
+    - Unique IDs
 
 ### Database
 
-Retrieves a value of the database for reading [db](http://docs.datomic.com/clojure/#datomic.api/db).
+[db](http://docs.datomic.com/clojure/#datomic.api/db) Retrieves a value of the database for reading.
 
 `db(conn)`
 
@@ -38,7 +34,7 @@ Creates a new DB with initial data (datoms) and a schema.
 
 `init_db(datoms..., schema)`
 
-Creates completely emty DB [entity-db](http://docs.datomic.com/clojure/#datomic.api/entity-db).
+[entity-db](http://docs.datomic.com/clojure/#datomic.api/entity-db) Creates a completely empty DB.
 
 `empty_db(schema)`
 
@@ -46,26 +42,24 @@ Returns the database value that is the basis for this entity
 
 `entity_db(..)`
 
-### Filter
-
-[filter](http://docs.datomic.com/clojure/#datomic.api/filter)
-
-`filter(db, pred)`
-
-Returns the value of the database containing only datoms
-satisfying the predicate.
-
 #### Filtered DBs (views)
 
 A Database can be filtered as a view. Transactions can NOT be performed on a filtered DB as it is a view and read only.
 
-Check if database is filtered, ie. is an instance of `FilteredDB`
+*Filter*
 
-[is-filtered](http://docs.datomic.com/clojure/#datomic.api/is-filtered)
+[filter](http://docs.datomic.com/clojure/#datomic.api/filter) Returns the value of the database containing only datoms
+satisfying the predicate.
 
-`is_filtered(db)` Returns true if db has had a filter set with filter
+`filter(db, pred)`
 
-### Connection
+*Check if filtered*
+
+[is-filtered](http://docs.datomic.com/clojure/#datomic.api/is-filtered) Check if database is filtered, ie. is an instance of `FilteredDB`
+
+`is_filtered(db)`
+
+#### DB Connection
 
 [connect](http://docs.datomic.com/clojure/#datomic.api/connect) Create a connection (and DB) for a schema
 
@@ -102,17 +96,19 @@ Execute a transaction to create a new entity.
 
 [with](http://docs.datomic.com/clojure/#datomic.api/with) Applies transaction data to the database. It is as if the data was
 applied in a transaction, but the source of the database is
-*unaffected*. Useful to simulate an update to the data without affecting the real underlying source. 
+*unaffected*. Useful to simulate an update to the data without affecting the real underlying source.
 
 `db_with(db, entities)`
 
 ### Queries
 
+#### Query data
+
 [q](http://docs.datomic.com/clojure/#datomic.api/q) query sources of data
 
 `q(query, sources)` 
 
-### Data pull
+#### Pull data
 
 *Pull one*
 
@@ -134,7 +130,7 @@ Get all attributes of entities: `max-id` and `alice-id`
 
 Example: `pull_many(db, ['*'], [max-id, alice-id])`
 
-### Fetch entity data
+#### Fetch entity data
 
 [entity](http://docs.datomic.com/clojure/#datomic.api/entity) Returns a dynamic map of the entity's attributes for the given id, ident or lookup ref.
 
@@ -170,11 +166,12 @@ Detach a listener from connection
 
 Example: `index_range(db, :person/name, 0, 100)`
 
-### Datoms
+#### Find index datoms
 
-[datoms](http://docs.datomic.com/clojure/#datomic.api/datoms) Raw access to the index data, by index. The index must be supplied,
-and, optionally, one or more leading components of the index can be
-narrow the result.
+Raw access to the index data, by index:
+
+[datoms](http://docs.datomic.com/clojure/#datomic.api/datoms) . The index must be supplied, and optionally one or more leading components of the index can be
+supplied to narrow the result.
 
 `datoms(db, index, components)`
 
@@ -183,7 +180,19 @@ and, optionally, one or more leading components of the index can be supplied for
 
 `seek_datoms(db, index, components)`
 
-### Unique IDs
+### IDs
+
+Utility functions for creating/resolving IDs.
+
+#### Temp Ids
+
+*Resolve temp id*
+
+[resolve-tempid](http://docs.datomic.com/clojure/#datomic.api/resolve-tempid) Resolve a tempid to the actual id assigned in a database.
+
+`resolve_tempid(tempids, tempid)`
+
+#### Unique IDs
 
 Datascript supports Squiidsm (globally unique identifiers) as used in [Datomic](http://docs.datomic.com/identity.html)
 
@@ -194,11 +203,3 @@ Datascript supports Squiidsm (globally unique identifiers) as used in [Datomic](
 [squuid-time-millis](http://docs.datomic.com/clojure/#datomic.api/squuid-time-millis) get the time part of a squuid.
 
 `squuid_time_millis(uuid)`
-
-### Temp Ids
-
-*Resolve temp id*
-
-[resolve-tempid](http://docs.datomic.com/clojure/#datomic.api/resolve-tempid) Resolve a tempid to the actual id assigned in a database.
-
-`resolve_tempid(tempids, tempid)`

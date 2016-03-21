@@ -34,36 +34,36 @@ var {DB_VALUE_TYPE, DB_TYPE_REF, DB_ADD, DB_ID, TEMPIDS} = helpers
 
 // Use regular JS API for create connection and add data to DB',
   // schema is JS Object
-  var schema = {"aka": {":db/cardinality": ":db.cardinality/many"}, "friend": {":db/valueType": ":db.type/ref"}};
+var schema = {
+  "aka": {":db/cardinality": ":db.cardinality/many"}, 
+  "friend": {":db/valueType": ":db.type/ref"}
+};
 
-  var conn = djs.create_conn(schema);
-  var reports = []
+var conn = djs.create_conn(schema);
+var reports = []
 
 djs.listen(conn, "main", report => {
     reports.push(report)
-  })
+})
 
+var datoms = [{
+      ":db/id": -1,
+      "name": "Ivan",
+      "age": 18,
+      "aka": ["X", "Y"]
+    },
+    {
+      ":db/id": -2,
+      "name": "Igor",
+      "aka": ["Grigory", "Egor"]
+    },
+    [":db/add", -1, "friend", -2]
+];
 
-  var datoms = [
-{
-  ":db/id": -1,
-  "name": "Ivan",
-  "age": 18,
-  "aka": ["X", "Y"]
-},
-{
-  ":db/id": -2,
-  "name": "Igor",
-  "aka": ["Grigory", "Egor"]
-},
-[":db/add", -1, "friend", -2]
-  ];
-
-  // Tx is Js Array of Object or Array
-  djs.transact(conn, datoms, "initial info about Igor and Ivan")
+// Tx is Js Array of Object or Array
+djs.transact(conn, datoms, "initial info about Igor and Ivan")
 
 // report is regular JS object'
-
 // query mori values from conn with CLJS API
 
 var result = dcljs.q(parse('[:find ?n :in $ ?a :where [?e "friend" ?f] [?e "age" ?a] [?f "name" ?n]]'), djs.db(conn), 18);

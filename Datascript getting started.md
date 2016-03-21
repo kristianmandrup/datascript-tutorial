@@ -1,41 +1,110 @@
 # Datascript getting started
 
-DataScript follows the Datomic api very closely, so the Datomic documentation is a good resource: http://docs.datomic.com/clojure/#datomic.api/touch
+DataScript follows the Datomic api very closely, so the [Datomic documentation](http://docs.datomic.com/clojure/#datomic.api) is a good resource
 
-There is also a lot of good [getting started guide](https://github.com/tonsky/datascript/wiki/Getting-started)
+There is also a good [getting started guide](https://github.com/tonsky/datascript/wiki/Getting-started)
 
-@tonsky and the community will appreciate if you ask API/usage questions on the [#datascript gitter channel](https://gitter.im/tonsky/datascript). GitHub [issues](https://github.com/tonsky/datascript/issues) should be reserved for "real" issues (bugs/problems and such):
+[@tonsky](http://www.twitter.com/tonsky) and the community will appreciate if you ask API/usage questions on the [#datascript gitter channel](https://gitter.im/tonsky/datascript). GitHub [issues](https://github.com/tonsky/datascript/issues) should be reserved for "real" issues (bugs/problems and such):
 
 ## Clojure quick start
 
+Update your `project.clj` file with required dependencies:
+
+```clojure
+  
 ```
-```
-(ns reagent-test.core
+
+
+- Create a new DB connection (schema less)
+- Transact datoms into DB
+- Execute a query datoms in DB to fetch a result
+
+```clojure
+(ns my-app.core
   (:require [datascript :as d]
             ;; more libs...
             ))
 
-
-;;; Creates a DataScript "connection" (an atom with the current DB value)
+;;; Create a DataScript "connection" (an atom with the current DB value)
 (def conn (d/create-conn))
 
-;;; Add some data
-(d/transact! conn [{:db/id -1 :name "Bob" :age 30}
-                   {:db/id -2 :name "Sally" :age 25}])
+;; Define datoms to transact
+(def datoms [{:db/id -1 :name "Bob" :age 30}
+             {:db/id -2 :name "Sally" :age 15}])
 
-;;; Query to find peeps whose age is less than 18
+;;; Add the datoms via transaction
+(d/transact! conn datoms)
+
+;;; Query to find names for entities (people) whose age is less than 18
 (def q-young '[:find ?n
                :where
+               :in ?min-age
                [?e :name ?n]
                [?e :age ?a]
-               [(< ?a 18)]])
+               [(< ?a ?min-age)]])
+
+;; execute query: q-young, passing 18 as min-age
+(d/q q-young 18)
+
+;; Query Result
+;; => [["Sally"]]
 ```
 
 ## Javascript quick start
 
+- Create a new DB connection with a DB schema
+- Setup listener
+- Transact datoms into DB
+- Execute a query datoms in DB to fetch a result
+
 ```js
 import {datascript as d} from 'datascript';
 
+// create DB schema, a regular JS Object
+var schema = {
+  "aka": {":db/cardinality": ":db.cardinality/many"},
+  "friend": {":db/valueType": ":db.type/ref"}
+};
+
+// Use JS API to create connection and add data to DB
+// create connection using schema
+var conn = d.create_conn(schema);
+
+// setup listener called main
+// pushes each entity (report) to an Array of reports
+// This is just a simple example. Make your own!
+var reports = []
+d.listen(conn, "main", report => {
+    reports.push(report)
+})
+
+// define initial datoms to be used in transaction
+var datoms = [{
+      ":db/id": -1,
+      "name": "Ivan",
+      "age": 18,
+      "aka": ["X", "Y"]
+    },
+    {
+      ":db/id": -2,
+      "name": "Igor",
+      "aka": ["Grigory", "Egor"]
+    },
+    // use :db/add to link datom -2 as friend of datom -1
+    [":db/add", -1, "friend", -2]
+];
+
+// Tx is Js Array of Object or Array
+// pass datoms as transaction data
+d.transact(conn, datoms, "initial info about Igor and Ivan")
+
+// Fetch names of people who are friends with someone 18 years old
+// query values from conn with JS API
+var result = d.q('[:find ?n :in $ ?a :where [?e "friend" ?f] [?e "age" ?a] [?f "name" ?n]]'), d.db(conn), 18);
+
+// print query result to console!
+console.log(result); // [["Igor"]]
 ```
 
-Show examples
+Please refer to the [[Javascript API]] for an overview of JS functions you can use to build your app. You can also have a loo
+
