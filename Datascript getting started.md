@@ -11,9 +11,21 @@ There is also a good [getting started guide](https://github.com/tonsky/datascrip
 Update your `project.clj` file with required dependencies:
 
 ```clojure
-  
-```
+:dependencies [
+    ;; CLIENT
+    ;; clojure and clojurescript
+    [org.clojure/clojurescript "1.7.145"]
 
+    ;; client DB (datascript)
+    [datascript "0.14.0"]
+
+    ;; SERVER
+    [org.clojure/clojure "1.8.0"]
+
+    ;; Server DB (datomic)
+    [com.datomic/datomic-free "0.9.5327" :exclusions [joda-time]]
+    ;; ...
+```
 
 - Create a new DB connection (schema less)
 - Transact datoms into DB

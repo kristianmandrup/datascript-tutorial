@@ -2,13 +2,18 @@
 
 ## Utils
 
-Use [parinfer]() for your editor if possible.
+We recommend using [parinfer](parinfer.io) for your editor if possible.
+The supported editors are:
+
+- [Atom]()
+- Cursive IDE on IntelliJ IDEA
+- ...
 
 ### Parinfer
 
 Parinfer is ...
 
-- [video]
+- [introducing paringer]() (video)
 
 ## Editors
 
@@ -33,5 +38,5 @@ Listed from most lightweight to full IDE.
 
 ## Build tools
 
-- [webpack]()
+- [webpack](www.webpack.org)
 

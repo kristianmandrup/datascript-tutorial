@@ -1,10 +1,10 @@
-## Schema creation
+# Schema creation
 
 The facts that a Datomic/Datascript database stores are represented by datoms. Each datom is an addition or retraction of a relation between an entity, an attribute, a value, and a transaction. The set of possible attributes a datom can specify is defined by a database's schema.
 
 Each database has a schema that describes the set of attributes that can be associated with entities. A schema only defines the characteristics of the attributes themselves. It does not define which attributes can be associated with which entities. Decisions about which attributes apply to which entities are made by an application.
 
-### Attributes
+## Attributes
 
 Schema attributes are defined using the same data model used for application data. That is, attributes are themselves entities with associated attributes. Datomic defines a set of built-in system attributes that are used to define new attributes.
 
@@ -204,7 +204,7 @@ Because Datomic maintains a *single set of physical indexes*, and supports query
 You can only rename the `:db/ident` or alter certain schema attributes of attributes.
 
 ### Renaming an Identity
-To rename a `:db/ident`, submit a transaction with the `:db/id` and the value of the new `:db/ident`. 
+To rename a `:db/ident`, submit a transaction with the `:db/id` and the value of the new `:db/ident`.
 
 The supported attributes to alter include `:db/cardinality`, `:db/isComponent`, `:db/noHistory`, `:db/index` and `:db/unique`. You can NOT alter `:db/valueType` or `:db/fulltext`.
 
