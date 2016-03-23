@@ -1,4 +1,4 @@
-# Project configuration
+# Clojure project configuration
 
 See [[Datascript getting started]] for more on project setup.
 
