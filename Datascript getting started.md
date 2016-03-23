@@ -8,23 +8,51 @@ There is also a good [getting started guide](https://github.com/tonsky/datascrip
 
 ## Clojure quick start
 
-Update your `project.clj` file with required dependencies:
+A full `project.clj` file for a datascript only app would look like this.
 
-```clojure
-:dependencies [
-    ;; CLIENT
-    ;; clojure and clojurescript
-    [org.clojure/clojurescript "1.7.145"]
-
-    ;; client DB (datascript)
-    [datascript "0.14.0"]
-
-    ;; SERVER
+```clj
+(defproject my-app "0.1.0"
+  :dependencies [
     [org.clojure/clojure "1.8.0"]
+    [org.clojure/clojurescript "1.8.34"]
+    [datascript "0.15.0"]
+    [datascript-transit "0.2.0"]
+    ;; ... more libs
+  ]
 
-    ;; Server DB (datomic)
-    [com.datomic/datomic-free "0.9.5327" :exclusions [joda-time]]
-    ;; ...
+  :plugins [
+    [lein-cljsbuild "1.1.0"]
+  ]
+
+  :cljsbuild {
+    :builds [
+      { :id "advanced"
+        :source-paths  ["src"]
+        :compiler {
+          :main          my-app.core
+          :output-to     "target/my-app.js"
+          :optimizations :advanced
+          :pretty-print  false
+        }}
+  ]}
+
+  :profiles {
+    :dev {
+      :cljsbuild {
+        :builds [
+          { :id "none"
+            :source-paths  ["src"]
+            :compiler {
+              :main          my-app.core
+              :output-to     "target/my-app.js"
+              :output-dir    "target/none"
+              :optimizations :none
+              :source-map    true
+            }}
+      ]}
+    }
+  }
+)
 ```
 
 - Create a new DB connection (schema less)
