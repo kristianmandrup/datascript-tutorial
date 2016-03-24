@@ -4,12 +4,14 @@ See the [Javascript-API](https://github.com/tonsky/datascript/wiki/Javascript-AP
 
 The [public API](https://github.com/tonsky/datascript/blob/master/src/datascript/js.cljs#L61) contains all available functions exported for use in JS land ;)
 
+There is a good (but dated) post on js/cljs interop [here](http://www.spacjer.com/blog/2014/09/12/clojurescript-javascript-interop/)
+
 ## Simple example app
 
 As you can see from the following code, the Javascript API looks almost identical to using the API from clojure, except for the missing `!` on side effect functions.
 
 ```js
-mport {datascript as d} from 'datascript'
+import {datascript as d} from 'datascript'
 
 // Use regular JS API for create connection and add data to DB',
   // schema is JS Object

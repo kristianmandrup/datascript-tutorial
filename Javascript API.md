@@ -134,9 +134,9 @@ Example: `pull_many(db, ['*'], [max-id, alice-id])`
 
 [entity](http://docs.datomic.com/clojure/#datomic.api/entity) Returns a dynamic map of the entity's attributes for the given id, ident or lookup ref.
 
-`entity(db, eid)`
+`entity_db(db, eid)`
 
-Example: `entity(db, [:person/email 'hans.gruber@gmail.com'])`
+Example: `entity_db(db, [:person/email 'hans.gruber@gmail.com'])`
 
 *Touch*
 

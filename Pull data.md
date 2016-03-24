@@ -18,30 +18,46 @@ The special pattern `'*'` fetches *all* attributes.
 ### Pull Many
 
 Pull Many can be used to retrieve a set of attributes from a set of entities.
-Thus the pull:
 
-`(d/pull ['*'])`
+SQL: `"SELECT * FROM People"`
 
-Is equivalent to the SQL:
+`(d/pull [db '*'])`
 
-`"SELECT * FROM People"`
+#### Selecting specific attributes
+
+`"SELECT name, age FROM People"`
+
+`(d/pull [db [:name :age]])`
 
 ### Pull One
 
 Pull one can be used to retrieve a set of attributes from a particular entity.
-Thus the pull:
+SQL: `["SELECT * FROM People WHERE People.id = ?", maksim-id]`
 
-`(d/pull ['*', maksim-id])`
+`(d/pull [db '*' maksim-id])`
 
-Is equivalent to the SQL:
+#### Selecting specific attributes
 
-`["SELECT * FROM People WHERE People.id = ?", maksim-id]`
+`(d/pull [db [:name :age] maksim-id)`
 
-### Usage with Query
+### Fetch entity by ID
 
-In Datascript, Pull can be used in combination with Queries to great effect.
+`entity(db eid)`
 
-TODO: Example
+### Pull with Query
 
+In Datascript, Pull can be used in combination with Query to great effect.
+Here we use `pull` on the `:aliases` attribute value `?a` in the `:where` clause to pull only `:name` and `:order` values, which will be used as the attributes to `find`.
 
+```clj
+;; query
+(->>
+  (d/q '[:find [(pull ?a [:name :order]) ...]
+         :in   $ ?e
+         :where [?e :aliases ?a]
+       db eid)
+  (sort-by :order)
+  (map :name))
+```
 
+We can then sort and map the query result independently (and/or include limit/paging logic).
