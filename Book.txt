@@ -15,11 +15,13 @@ Advanced Queries.md
 Pull data.md
 Time travel.md
 CRUD.md
+Reagent app.md
 Todo app.md
 Javascript integration.md
+Javascript project config.md
 Mori integration.md
 Posh and Reagent.md
 Client-Server data sync.md
-
+Dato framework.md
 
 
