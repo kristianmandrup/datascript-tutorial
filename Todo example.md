@@ -150,27 +150,9 @@ We also need various grouping filters
        db (u/month-start month year) (u/month-end month year)))
 ```
 
-## Rum: React components
+### Toggle Todo done
 
-Rum is an alternative React renderer, similar to Om, Reagent and Omniscient, but designed to be more flexible.
-
-Rum let's us easily design React components with actions, much like redux.
-
-First we define a `filter-pane` component which contains an input element that triggers `(set-system-attrs! :system/filter value)`
-
-```clj
-;; Keyword filter
-
-(rum/defc filter-pane [db]
-  [:.filter-pane
-    [:input.filter {:type "text"
-                    :value (or (system-attr db :system/filter) "")
-                    :on-change (fn [_]
-                                 (set-system-attrs! :system/filter (dom/value (dom/q ".filter"))))
-                    :placeholder "Filter"}]])
-```
-
-## Transactions
+The `toggle-todo-tx` function, swaps the value of `:todo/done` attribute via a transaction: `[:db/add eid :todo/done (not done?)]`
 
 ```clj
 ;; This transaction function swaps the value of :todo/done attribute.
@@ -180,42 +162,41 @@ First we define a `filter-pane` component which contains an input element that t
 (defn toggle-todo-tx [db eid]
   (let [done? (:todo/done (d/entity db eid))]
     [[:db/add eid :todo/done (not done?)]]))
+```
 
+The `toggle-todo` function transacts the toggling of `todo/done` status.
+
+```clj
 (defn toggle-todo [eid]
   (d/transact! conn [[:db.fn/call toggle-todo-tx eid]]))
+```
 
-(rum/defc todo-pane [db]
-  [:.todo-pane
-    (let [todos (let [[group item] (system-attr db :system/group :system/group-item)]
-                  (todos-by-group db group item))]
-      (for [eid (sort todos)
-            :let [td (d/entity db eid)]]
-        [:.todo {:class (if (:todo/done td) "todo_done" "")}
-          [:.todo-checkbox {:on-click #(toggle-todo eid)} "✔︎"]
-          [:.todo-text (:todo/text td)]
-          [:.todo-subtext
-            (when-let [due (:todo/due td)]
-              [:span (.toDateString due)])
-            ;; here we’re using entity ref navigation, going from
-            ;; todo (td) to project to project/name
-            (when-let [project (:todo/project td)]
-              [:span (:project/name project)])
-            (for [tag (:todo/tags td)]
-              [:span tag])]]))])
+### Extract Todo item values
 
+The `extract-todo` function extract a Todo Map (object) from the *Add task* form (when submitted).
+
+```clj
 (defn extract-todo []
   (when-let [text (dom/value (dom/q ".add-text"))]
     {:text    text
      :project (dom/value (dom/q ".add-project"))
      :due     (dom/date-value  (dom/q ".add-due"))
      :tags    (dom/array-value (dom/q ".add-tags"))}))
+```
 
+### Cleanup Todo form
+
+The `clean-todo` function simply resets the *Add task* form.
+
+```clj
 (defn clean-todo []
   (dom/set-value! (dom/q ".add-text") nil)
   (dom/set-value! (dom/q ".add-project") nil)
   (dom/set-value! (dom/q ".add-due") nil)
   (dom/set-value! (dom/q ".add-tags") nil))
 ```
+
+## Add new Todo item
 
 The `add-todo` function adds a `todo` to the application state.
 First the todo object is extracted via `(when-let [todo (extract-todo)]`.
@@ -228,6 +209,7 @@ Then we set `project-tx` to be a new entity to be added, `[[:db/add -1 :project/
 We then define the todo `entity` to transact (ie. to be upserted) using these and other todo values such as `due` and `tags`. Then the entities are transact via `(d/transact! conn (concat project-tx [entity])))`
 
 The todo entity is concatenated to the `project-tx` transaction (see above) or on its own, referencing an existing project entity via `todo/project`.
+Finally we call `clean-todo` to reset the form.
 
 ```clj
 (defn add-todo []
@@ -251,7 +233,55 @@ The todo entity is concatenated to the `project-tx` transaction (see above) or o
     (clean-todo)))
 ```    
 
-## View components
+## Rum: React components
+
+We create our React view components via the lightweight, flexible  [Rum]() framework also by [@tonsky]().
+
+Rum is an alternative React renderer, similar to Om, Reagent and Omniscient, but designed to be more flexible.
+
+Rum let's us easily design React components with actions, much like redux.
+
+First we define a `filter-pane` component which contains an input element that triggers `(set-system-attrs! :system/filter value)`
+
+```clj
+;; Keyword filter
+
+(rum/defc filter-pane [db]
+  [:.filter-pane
+    [:input.filter {:type "text"
+                    :value (or (system-attr db :system/filter) "")
+                    :on-change (fn [_]
+                                 (set-system-attrs! :system/filter (dom/value (dom/q ".filter"))))
+                    :placeholder "Filter"}]])
+```
+
+## Displaying filtered list of Todos
+
+The `todo-pane` component shows the todos in the current app state with current filters applied. It first retrieves the `:system/group` and `:system/group-item` system entity attributes and calls `todos-by-group` with these filter values to get the list of `todos` to display.
+Then the todos are iterated by entity id (and sorted) via `(for [eid (sort todos) ...`. For each entity id we fetch the full Todo entity via `(d/entity db eid)`, stored in the local `td` Map (object). We use `td` to display the Todo item and project it belongd to. The display includes a checkbox to toggle `:todo/done` status for the todo, via `(toggle-todo eid)` (see above).
+
+```clj
+(rum/defc todo-pane [db]
+  [:.todo-pane
+    (let [todos (let [[group item] (system-attr db :system/group :system/group-item)]
+                  (todos-by-group db group item))]
+      (for [eid (sort todos)
+            :let [td (d/entity db eid)]]
+        [:.todo {:class (if (:todo/done td) "todo_done" "")}
+          [:.todo-checkbox {:on-click #(toggle-todo eid)} "✔︎"]
+          [:.todo-text (:todo/text td)]
+          [:.todo-subtext
+            (when-let [due (:todo/due td)]
+              [:span (.toDateString due)])
+            ;; here we’re using entity ref navigation, going from
+            ;; todo (td) to project to project/name
+            (when-let [project (:todo/project td)]
+              [:span (:project/name project)])
+            (for [tag (:todo/tags td)]
+              [:span tag])]]))])
+```
+
+### Add view
 
 The *Add* view let's us add a new Task (todo item). It builds a form where we can name the task and set: `projects`, `tags` and `due date` for the task.
 We set the `on-submit` function of the form to call `add-todo` with the task (ie. form values) to be added.
@@ -266,6 +296,8 @@ We set the `on-submit` function of the form to call `add-todo` with the task (ie
     [:input.add-due     {:type "text" :placeholder "Due date"}]
     [:input.add-submit  {:type "submit" :value "Add task"}]])
 ```
+
+## History view
 
 The History view let's us go forward and backwards in time, by calling `u/find-prev` and `u/find-next` respectively on the `@history` state to retrieve a given atom state and then passing that state to `reset-conn!` such as `(reset-conn! prev)` to set our current app state to a specific time in history.
 
@@ -287,6 +319,8 @@ The History view let's us go forward and backwards in time, by calling `u/find-p
       [:button.history-btn {:disabled true} "redo ›"])])
 ```
 
+## Main app view
+
 The main component of the app is defined as `canvas`.
 The `canvas` renders the `main`, `history` and `add task` views. The `main` view contains a `filter` pane and the panes `overview-pane` and `todo-pane`.
 
@@ -303,6 +337,8 @@ The `canvas` renders the `main`, `history` and `add task` views. The `main` view
     (history-view db)])
 ```
 
+## App rendering
+
 The main `render` function uses the current `@conn` as app data and mounts the canvas on the document `<body>` element.
 
 ```clj
@@ -313,6 +349,8 @@ The main `render` function uses the current `@conn` as app data and mounts the c
       (rum/mount (canvas db) js/document.body))))
 ```
 
+## Render trigger
+
 We set up a transaction report listener `:render`, to re-render on every transaction!
 
 ```
@@ -321,6 +359,8 @@ We set up a transaction report listener `:render`, to re-render on every transac
   (fn [tx-report]
     (render (:db-after tx-report))))
 ```
+
+## Logging
 
 We set up another transaction report listener `:log`, to log transactions via `println` (which prints via `console.log`).
 
@@ -335,6 +375,8 @@ We set up another transaction report listener `:log`, to log transactions via `p
       (println
         (str/join "\n" (concat [(str "tx " tx-id ":")] (map datom->str datoms)))))))
 ```
+
+## History update trigger
 
 Finally the `:history` listener is configured to trigger when we have both a `:db-before` and `:db-after` in the `tx-report`, ie. `(when (and db-before db-after) ...)`, ie. we have a previous (version) history and a new history entry.
 
@@ -352,6 +394,8 @@ Then we `swap!` (ie update) the existing history with a new history that has the
             (conj db-after)
             (u/trim-head history-limit))))))))
 ```
+
+## Localstorage serialization
 
 We now define the utility serialize methods `db->string` and `string->db` to serialize/deserialize the database to/from the string format used to save/restore the DB from *localstorage*. Note that we use `datascript-transit` for this, using the `dt` namespace alias, via `dt/write-transit-str` and `dt/read-transit-str`
 
@@ -379,11 +423,12 @@ We then set up a listener called `:persistence` which on every transaction (`tx-
 
 ```clj
 (d/listen! conn :persistence
-  (fn [tx-report] ;; FIXME do not notify with nil as db-report
-                  ;; FIXME do not notify if tx-data is empty
+  (fn [tx-report]                   
     (when-let [db (:db-after tx-report)]
       (js/setTimeout #(persist db) 0))))
 ```
+
+## App load
 
 On app load, the following will be executed, which tests if we have an existing app state stored in localstorage, and if so we will use this state to set the connection state and history. If not, we will initialize the DB by transacting some fixture data `u/fixtures`
 
