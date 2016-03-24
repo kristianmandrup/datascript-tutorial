@@ -4,6 +4,9 @@
 
 - [decomposing web app development](http://tonsky.me/blog/decomposing-web-app-development/)
 - [the web after tomorrow](http://tonsky.me/blog/the-web-after-tomorrow/)
+- [ClojureScript + React.js - Norbert Wójtowicz](https://www.youtube.com/watch?v=6_mbxaRDA-s)
+
+This should convince you!
 
 ## [DataScript](https://github.com/tonsky/datascript/blob/master/README.md)
 
