@@ -3,6 +3,7 @@
 I'm writing an Open Source book to make it easier to get started developing apps using Datomic and Datascript. Please assist in the effort if you have good material, time and/or experience with these databases. Thanks :)
 
 - [Intro](https://github.com/kristianmandrup/datascript-tutorial/Intro.md)
+- [ClojureScript](https://github.com/kristianmandrup/datascript-tutorial/ClojureScript.md)
 - [Datomic Architecture](https://github.com/kristianmandrup/datascript-tutorial/Datomic Architecture.md)
 - [Datascript Architecture](https://github.com/kristianmandrup/datascript-tutorial/Datascript Architecture.md)
 - [Datomic getting started](https://github.com/kristianmandrup/datascript-tutorial/Datomic getting started.md)

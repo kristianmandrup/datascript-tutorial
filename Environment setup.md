@@ -13,21 +13,24 @@ As of spring 2016, parinfer comes in javascript, python, jvm, elisp and viml fla
 - [Emacs](https://github.com/oakmac/parinfer-elisp)
 - [Vim](https://github.com/oakmac/parinfer-viml)
 
-- atom-parinfer for Atom
-- nvim-parinfer.js for neovim
-- vim-parinfer for Vim
-- vscode-parinfer for Visual Studio Code
-- sublime-text-parinfer for Sublime Text
-- parinfer-mode for Emacs
-- codemirror-parinfer for CodeMirror
-- lt_parinfer for Light Table
-- native support in Nightcode
+Parinfer is still in early development.  Several people have started
+integrating it into code editors at various stages of development.
 
-Parinfer is available for some REPL environments as well:
+- [atom-parinfer] for [Atom]
+- [nvim-parinfer.js] for [Neovim]
+- [vim-parinfer] for [Vim]
+- [vscode-parinfer] for [Visual Studio Code]
+- [sublime-text-parinfer] for [Sublime Text]
+- [parinfer-mode] for [Emacs]
+- [codemirror-parinfer] for [CodeMirror]
+- [lt_parinfer] for [Light Table]
+- native support in [Nightcode]
 
-- Replete for iOS
-- Dirac DevTools for Google Chrome
-- Reepl for the browser
+Parinfer will soon be available for some REPL environments as well:
+
+- [Replete] for iOS
+- [Dirac DevTools] for Google Chrome
+- [Reepl] for the browser
 
 ### Parinfer
 
@@ -36,6 +39,12 @@ Parinfer manages your parentheses based on indentation levels, similar to Python
 - [online demo](http://shaunlebron.github.io/parinfer/demo)
 - [Parinfer in Replete REPL](https://www.youtube.com/watch?v=xdIwkPEnlFY)
 - [Planck indentation with Parinfer](https://www.youtube.com/watch?v=q4LmSC6xdsI)
+
+### Modes
+
+- Ident mode (default)
+- [Paren mode](https://www.youtube.com/watch?v=8BkAD0vKJrA)
+- [Parinfer previewCursorScope mode](https://www.youtube.com/watch?v=vrY27KOs_nk)
 
 ## Editors
 
