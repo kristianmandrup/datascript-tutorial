@@ -3,7 +3,7 @@
 I'm writing an Open Source book to make it easier to get started developing apps using Datomic and Datascript. Please assist in the effort if you have good material, time and/or experience with these databases. Thanks :)
 
 - [Intro](https://github.com/kristianmandrup/datascript-tutorial/Intro.md)
-- [ClojureScript](https://github.com/kristianmandrup/datascript-tutorial/ClojureScript.md)
+- [Why Datascript?](https://github.com/kristianmandrup/datascript-tutorial/Why Datascript.md)
 - [Datomic Architecture](https://github.com/kristianmandrup/datascript-tutorial/Datomic Architecture.md)
 - [Datascript Architecture](https://github.com/kristianmandrup/datascript-tutorial/Datascript Architecture.md)
 - [Datomic getting started](https://github.com/kristianmandrup/datascript-tutorial/Datomic getting started.md)
@@ -26,5 +26,12 @@ I'm writing an Open Source book to make it easier to get started developing apps
 - [Javascript project config.md](https://github.com/kristianmandrup/datascript-tutorial/Javascript project config.md.md)
 - [Mori integration](https://github.com/kristianmandrup/datascript-tutorial/Mori integration.md)
 - [Posh and Reagent](https://github.com/kristianmandrup/datascript-tutorial/Posh and Reagent.md)
+- [Client/Server apps](https://github.com/kristianmandrup/datascript-tutorial/Client-Server apps.md)
 - [Client/Server data sync](https://github.com/kristianmandrup/datascript-tutorial/Client-Server data sync.md)
+- [React Native](https://github.com/kristianmandrup/datascript-tutorial/React Native.md)
 - [Dato framework](https://github.com/kristianmandrup/datascript-tutorial/Dato framework.md)
+
+## Appendix
+
+- [ClojureScript](https://github.com/kristianmandrup/datascript-tutorial/ClojureScript.md)
+- [Environment setup](https://github.com/kristianmandrup/datascript-tutorial/Environment setup.md)
