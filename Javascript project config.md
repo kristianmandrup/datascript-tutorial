@@ -30,6 +30,8 @@ We'd like to split our application into three pieces, the shared bit, the bit fo
 }
 ```
 
+More info can be found on the [ClojureScript wiki](https://github.com/clojure/clojurescript/wiki/Compiler-Options#modules)
+
 The final gzipped sizes of the modules for the example above:
 - `cljs_base.js`, 22K
 - `foo.js`, 3K
