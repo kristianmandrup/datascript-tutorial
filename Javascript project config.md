@@ -41,3 +41,5 @@ For large ClojureScript applications I think it's an understatement to say that 
 
 So no reason to use Webpack!
 
+PS: For *dynamic* (runtime) module loading, check this [blog post](https://rasterize.io/blog/cljs-dynamic-module-loading.html)
+
