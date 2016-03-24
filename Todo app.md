@@ -1,4 +1,6 @@
-# Todo example
+# Todo app
+
+The `core` namespace includes `datascript`, `datascript-transit` and `rum` as the main libraries. `datascript-transit` is used to serialize to the awesome [transit]() format. `rum` is a React component framework, similar to reagent or Om.
 
 ```clj
 (ns datascript-todo.core
@@ -12,7 +14,7 @@
 
 ## Define Todo schema
 
-We start by defining the schema as a regular clojure Map then define a function using `defonce` which can create a DB connection from the schema.
+We start off by defining the schema as a regular clojure Map then define a function using `defonce` which can create a DB connection from the schema.
 `defonce` helps to ensure we will only ever have one connection in the app.
 
 ```clj

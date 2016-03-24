@@ -15,7 +15,7 @@ Advanced Queries.md
 Pull data.md
 Time travel.md
 CRUD.md
-Todo example.md
+Todo app.md
 Javascript integration.md
 Mori integration.md
 Posh and Reagent.md

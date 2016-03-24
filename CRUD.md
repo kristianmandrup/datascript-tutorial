@@ -14,13 +14,31 @@ We can easily get one or more entities with specific attributes as a high perfor
 
 Datascript/Datomic create and update entity data via "upserts" (update or insert), ie. facts are inserted (created) or updated. An "update" is simply a new commit with an add (create). If the entity does not exist, a new entity is created at that time. If an existing entity exists, a new version (in time) of that entity is created.
 
+```clj
+(d/transact! conn [{
+    :db/add -1
+    :person/email 'hans.gruber@gmail.com'
+    :person/name 'Hans Gruber' }])
+```
+
 ### Update
 
-See "upserts" for Create.
+Add (upsert) attributes to existing entity as follows:
+
+```clj
+(d/transact! conn [{
+    :db/add entity-id
+    :person/email 'hans.gruber@gmail.com'
+    :person/name 'Hans Gruber' }])
+```
+
+Where `entity-id` is either the lookup reference, like `[:person/email 'hans.gruber@gmail.com']` or the id itself, like `17353235`.
 
 ### Delete
 
-Datascript/Datomic use `retract`
+Datascript/Datomic use `retract` to delete an entity by *entity id* (or *lookup reference* as for *Create*).
+
+`(d/transact! conn [{ :db/retract entity-id }])`
 
 ### Read
 
@@ -29,18 +47,24 @@ For CRUD apps, the pull API should be used where possible as it is simpler and f
 Get entity (Person) by ID, such as `GET: persons/1`.
 
 ```clj
-d/pull(['*'], [:person/id, 1])
+d/pull(db, ['*'], [:person/id, 1])
 ```
 
-We recommend leveraging *Lookup refs* to have an domain specific id, such as `:person/id`, like a primary (unique) key for each entity (see *Lookup refs* section in [Create Schema] chapter).
+Alternatively can fetch an entity as follows:
+
+`entity(db, eid)`
+
+Returns a dynamic map of the entity's attributes for the given id, ident or lookup ref.
+
+Example: `entity(db, [:person/email 'hans.gruber@gmail.com'])`
+
+We recommend leveraging *Lookup refs* to have a domain specific id, such as `:person/id`, like a primary (unique) key for each entity (see *Lookup refs* section in [Create Schema] chapter).
 
 Using the entity id directly, it would be something like: `GET: persons/17235393939`.
 
-```clj
-d/pull(['*'], 17235393939)
-```
+`d/pull(db, ['*'], 17235393939)` or `d/entity(db, 17235393939)`
 
-Which doesn't quite look and feel right.
+Which doesn't quite look and feel right IMO.
 
 ### Get specific attributes only
 

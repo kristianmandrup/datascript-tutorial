@@ -21,6 +21,7 @@ I'm writing an Open Source book to make it easier to get started developing apps
 - [CRUD](https://github.com/kristianmandrup/datascript-tutorial/CRUD.md)
 - [Todo example](https://github.com/kristianmandrup/datascript-tutorial/Todo example.md)
 - [Javascript integration](https://github.com/kristianmandrup/datascript-tutorial/Javascript integration.md)
+- [Reagent integration](https://github.com/kristianmandrup/datascript-tutorial/Reagent integration.md)
 - [Mori integration](https://github.com/kristianmandrup/datascript-tutorial/Mori integration.md)
 - [Posh and Reagent](https://github.com/kristianmandrup/datascript-tutorial/Posh and Reagent.md)
 - [Client/Server data sync](https://github.com/kristianmandrup/datascript-tutorial/Client-Server data sync.md)
