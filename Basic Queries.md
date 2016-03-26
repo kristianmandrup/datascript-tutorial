@@ -82,7 +82,7 @@ We tell the query to expect a list of tuples `[[?color ?x]]`
 Then we pass in the list of tuples: `[:red 10] ... [:red 50]` and the query result is as expected.
 
 ```clojure
-(d/q '[ :find ?color (min ?x) (max ?x)]
+(d/q '[ :find ?color (min ?x) (max ?x)
         :in [[?color ?x]]
       ]
       [[:red 10]  [:red 20] [:red 30] [:blue 20] [:blue 50]] ;; query params

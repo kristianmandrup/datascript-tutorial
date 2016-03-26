@@ -44,9 +44,17 @@ SQL: `["SELECT * FROM People WHERE People.id = ?", maksim-id]`
 
 `entity(db eid)`
 
-### Pull with Query
+### Pull and Query combined
 
 In Datascript, Pull can be used in combination with Query to great effect.
+Let's say we want to extract all entity data of all entities.
+
+`(d/pull-many db '[*] (d/q '[:find ?e :where [?e]]))`
+
+The `d/q` will match all entity ids in the db
+Then `pull-many` pulls everything for all of them
+
+We can f.ex also use a pull to find attributes to be used in a `:find` clause.
 Here we use `pull` on the `:aliases` attribute value `?a` in the `:where` clause to pull only `:name` and `:order` values, which will be used as the attributes to `find`.
 
 ```clj

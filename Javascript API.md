@@ -106,7 +106,74 @@ applied in a transaction, but the source of the database is
 
 [q](http://docs.datomic.com/clojure/#datomic.api/q) query sources of data
 
-`q(query, sources)` 
+`q(query, sources)`
+
+Queries in Clojure are written usin EDN, which doesn't directly translate to JS. So in order to use queries from JS, we need to serialize a JS string to EDN. We can use a library such as [jsedn]()
+
+### JS/EDN converter
+
+In your `package.json` file include a dependency to jsedn:
+
+`"jsedn" : "kristianmandrup/jsedn"`
+
+Then use it `edn`  as follows:
+
+```js
+var edn = require('jsedn');
+
+var query = edn.parse(`
+    :find max(?id)
+    :where [?e, :person/id ?id]`);
+
+d.q([query], conn, 18)
+```
+
+### Babel plugin
+
+[babel-plugin-datascript](https://github.com/typeetfunc/babel-plugin-datascript/) let's you write your queries like:
+
+```js
+var result = Datalog.Q`[:find  ?e ?email
+                          :in    $ [[?n ?email]]
+                          :where [?e :name ?n]]`;
+```
+
+and it will be compiled to code, which is wrapped in a Mori immutable data model:
+
+```js
+import { mori as _mori } from 'datascript-mori';
+var Datalog = _mori.vector(_mori.keyword('find'), _mori.symbol('?e'), _mori.symbol('?email'), _mori.keyword('in'), _mori.symbol('$'), _mori.vector(_mori.vector(_mori.symbol('?n'), _mori.symbol('?email'))), _mori.keyword('where'), _mori.vector(_mori.symbol('?e'), _mori.keyword('name'), _mori.symbol('?n')));
+```
+
+Which you can then use with [datascript-mori](https://github.com/typeetfunc/datascript-mori)
+
+### Query DSL for JS
+
+We aim to enable building queries using a DSL more suitable for JS.
+
+```js
+var query = {find: 'max(?id)', where: ['?e', ':person/id' '?id']};
+d.q(query, conn, 18)
+```
+
+Or using chain builder syntax:
+
+```js
+var query = find('max(?id)').where('?e', ':person/id' '?id').and('?e', ':person/id' '?id');
+```
+
+Or even better:
+
+```js
+var query = q()
+    .find('max(?id) ?email')
+    .where(entity: '?e')
+    .has(':person/id': '?id')
+    .and(':person/email': '?email')
+    .build();
+```
+
+Please help out in this effort :)
 
 #### Pull data
 

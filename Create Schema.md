@@ -156,7 +156,7 @@ We can similarly use `:db.unique/value` for identity attributes that should be g
 
 ```clojure
 ;; registering in schema
-(def schema {:db/ident {:db/unique :db.unique/identity}})
+(def schema {:person/email {:db/unique :db.unique/identity}})
 ```
 
 We can now add an entity with `:db/ident` set to a unique key of our choosing
