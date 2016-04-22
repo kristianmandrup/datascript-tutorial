@@ -28,6 +28,7 @@ I'm writing an Open Source book to make it easier to get started developing apps
 - [Posh and Reagent](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Posh and Reagent.md)
 - [Client/Server apps](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Client-Server apps.md)
 - [Client/Server data sync](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Client-Server data sync.md)
+- [Catalysis](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Catalysis.md)
 - [React Native](https://github.com/kristianmandrup/datascript-tutorial/blob/master/React Native.md)
 - [Dato framework](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Dato framework.md)
 
