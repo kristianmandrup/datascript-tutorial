@@ -34,24 +34,37 @@ Then we define the main app state atom:
 
 [Rum](https://github.com/tonsky/rum) is used as the React wrapper.
 
-The view consists of:
-- progress bar
+The main view is called `application`. We pass in the application state atom `app-state` and the DB connection `conn`. We then define them as the local vars `db`, `state` and then the `path` is extracted from state.
+
+The `path` determines which page to show, one of either:
+- `index-page`
+- `user-page`
+- `repo-page`
+
+Each page is wrapped in a `header` and `footer`.
+
+```cljs
+(rum/defc application < rum/cursored-watch [app-state conn]
+  (let [db @conn
+        state @app-state
+        path (:path state)]
+    [:.window {:on-click (fn [e] (when (inner-nav? e) (dom/scroll-to-top)))}
+      (header state)
+      (when-not (:first-load? state)
+        (list
+          (messages-overlay db)
+          (cond
+            (index? path) (index-page db state)
+            (u/starts-with? path "/user/") (user-page db (subs path (count "/user/")))
+            (u/starts-with? path "/repo/") (repo-page db (subs path (count "/repo/"))))
+          (footer db)))]))
+```
+
+A page contains:
 - header
 - footer (static)
 
-The progress bar is displayed if there is any (ie. non-negative) progress.
-Display is achieved simply by using `style` with `width` set to progress (`0.0` - `1.0` "percentage") x `900` px.
-
-```cljs
-(rum/defc progress-bar < rum/static [progress]
-  (if (neg? progress)
-    [:.progress.progress__offline]
-    [:.progress
-      [:.progress__bar
-       {:style {:width (* progress 900)}}]]))
-```
-
-The header shows only progress bar when first loading.
+The `header` shows the progress bar only when the app is first loading.
 
 ```cljs
 (rum/defc header < rum/static [state]
@@ -70,13 +83,79 @@ The header shows only progress bar when first loading.
     (progress-bar (:progress state))])
 ```
 
+The progress bar displays the percentage of the database loaded (received) from the server.
+The progress bar is displayed if there is any (ie. non-negative) `progress`, stored in the app `state`.
 
-## Repos
+The progress bar is displayed by using `style` with `width` set to progress (`0.0` - `1.0` "percentage") x `900` px.
 
-Repos are displayed via:
-- repo-pane
-- repo-profile
-- ...
+```cljs
+(rum/defc progress-bar < rum/static [progress]
+  (if (neg? progress)
+    [:.progress.progress__offline]
+    [:.progress
+      [:.progress__bar
+       {:style {:width (* progress 900)}}]]))
+```
+
+## Pages
+
+The pages for acha-acha, are:
+- `index-page`
+- `user-page`
+- `repo-page`
+
+The `index-page` displays the `user-pane` and `repo-pane`
+The `title` is empty.
+
+```cljs
+(rum/defc index-page < rum/static [db state]
+  (do
+    (dom/set-title! nil)
+    [:div
+      (users-pane db state (u/qes-by db :user/email))
+      (repo-pane  db)]))
+```
+
+The `repo-page` displays the `ach-pane` (achievements) and `repo-profile`.
+The `title` is the repo name.
+
+```cljs
+(rum/defc repo-page [db url]
+  (let [repo  (u/qe-by db :repo/url url)
+        aches (->> (:ach/_repo repo) group-aches)]
+    (dom/set-title! (repo-name url))
+    [:div
+      (ach-pane aches repo-achent)
+      (repo-profile repo aches)]))
+```
+
+The `user-page` displays the `ach-pane` (achievements) using the `user-achent` view component. The user page displays user info for the user by email (unique id). The `user` is retrieved by querying the db for a user by email.
+The `user-profile` is then displayed, passing the `user` and his/her achievements.
+The `title` is the user name.
+
+```cljs
+(rum/defc user-page [db email]
+  (let [user  (u/qe-by db :user/email email)
+        aches (->> (:ach/_user user) group-aches)]
+    (dom/set-title! (:user/name user))
+    [:div
+      (ach-pane aches user-achent)
+      (user-profile user aches)]))
+```
+
+## Panes
+
+The panes on the index page are:
+- `repo-pane`
+- `user-pane`
+
+The `repo-pane` fetches the `repos` by querying the db for matches on repo url, using `u/ques-by` (queries by).
+
+The `last-aches` (last achievements) are retrieved directly by a `d/datoms`lookup in the `avet` index, for attributes matching `:ach/assigned`, then taking the last 10 in reverse.
+
+The repos are then displayed in a `li` list and with a form input underneath to clone the url for a given repo.
+
+The last achievements are iterated and each displayed via `last-ach`, passing the achievement by calling `d/entity` to feth the full entity of the achievement (using `(.-e ach)`).
 
 ```cljs
 (rum/defc repo-pane < rum/static [db]
@@ -97,7 +176,42 @@ Repos are displayed via:
               (last-ach (d/entity db (.-e ach))))]))]))
 ```
 
-`repo-profile` uses `repo-status` helper
+The `users-pane` displays a pane for a list of `users`, by mapping the `users` and rendering a `user` component for each.
+
+```cljs
+(rum/defc users-pane < rum/static user-pane-appender-mixin [db state users]
+  (let [ach-cnt (u/qmap '[:find  ?u (count ?a)
+                          :where [?e :ach/achent ?a]
+                                 [?e :ach/user ?u]] db)
+        visible (get-in state [:users :visible])
+        users (->> users (sort-by #(ach-cnt (:db/id %) -1)) reverse (take visible))]
+    [:.users_pane.pane
+      [:h1 "Users"]
+      (if (not-empty users)
+        [:ul
+          (map (fn [u] [:li {:key (:db/id u)} (user u (ach-cnt (:db/id u)))]) users)]
+        [:.empty "Nobody achieved anything yet"])]))
+```
+
+The `ach-cnt` defined as a `u/qmap` function, passing a query `q` which finds and counts all `:ach/achent` (achievements) for a given user `u?` in `:ach/user`.
+
+```(defn qmap
+  "Convert returned 2-tuples to a map"
+  [q & sources]
+  (into {} (apply -q q sources)))
+```
+
+The `users` are the defined by sorting by incoming `users` by their achievement count (ie. `ach-cnt`).
+
+The users are then displayed by mapping over them and displaying each in a `li` list.
+
+## Repos
+
+Repos are displayed via:
+- `repo-pane`
+- `repo-profile`
+
+The `repo-profile` uses `repo-status` helper.
 
 ```cljs
 (rum/defc repo-profile < rum/static [repo aches]
@@ -122,6 +236,8 @@ Repos are displayed via:
                        :title (str (:achent/name achent) ":\n\n" (:achent/desc achent))}])]])
 ```
 
+A `repo-achent` achievement view takes an achievement `achent` and a list of achievements `aches` and displays the details of the achievement, then iterating over the achievement list and displaying user details for each.
+
 ```cljs
 (rum/defc repo-achent < rum/static [achent aches]
   [:.ach { :key (:db/id achent)}
@@ -139,15 +255,11 @@ Repos are displayed via:
                            :title (ach-details ach)}]])]])
 ```
 
-
 ## Users
 
 Users are displayed via:
 - user-page
-- user
 - user-profile
-- users-pane
-- user-achent (user achievement)
 
 The `user-page` displays an achievement pane for each user and the user profile.
 
@@ -191,22 +303,6 @@ The `user-profile` displays user info and loops over user achievements in `aches
                       :title (str (:achent/name achent) ":\n\n" (:achent/desc achent))}])]])
 ```
 
-The `users-pane` displays a pane for a list of `users`, mapping of the `users` and rendering `user` component for each.
-
-```cljs
-(rum/defc users-pane < rum/static user-pane-appender-mixin [db state users]
-  (let [ach-cnt (u/qmap '[:find  ?u (count ?a)
-                          :where [?e :ach/achent ?a]
-                                 [?e :ach/user ?u]] db)
-        visible (get-in state [:users :visible])
-        users (->> users (sort-by #(ach-cnt (:db/id %) -1)) reverse (take visible))]
-    [:.users_pane.pane
-      [:h1 "Users"]
-      (if (not-empty users)
-        [:ul
-          (map (fn [u] [:li {:key (:db/id u)} (user u (ach-cnt (:db/id u)))]) users)]
-        [:.empty "Nobody achieved anything yet"])]))
-```
 
 The `user-achent` displays a list of user achievements
 
