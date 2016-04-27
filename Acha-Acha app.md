@@ -30,6 +30,90 @@ Then we define the main app state atom:
   :path        "/"}))
 ```
 
+### Listen loop
+
+The listen loop sets up 3 main `core.async` incoming data channels:
+- `socket-ch` (events)
+- `data-ch` (data)
+- `ajax-ch` (batch data)
+
+We then listen to the socket channel `/events` and set up listeners for:
+- `on-open` puts `:open` on the `socket-ch` to notify start receiving data.
+- `on-close` closes all channels.
+- `on-message` puts the message on the `data-ch` for processing.
+
+We then start an async `go` routine for the incoming `socket-ch` data.
+We set progress initially to `0.3` (30%). An ajax call is made to `/api/db` to fetch all datomsand put them on the `ajax-ch` channel, setting progress to `0.6` when complete.
+When we have received all data (or after 30 secs timeout), we reset the DB connection with the data `dump` and `schema`. Then calculate the numer of users, datoms and achievements using the indexes directly (faster!).
+Then we set the `app-state` of the app and set progress to `1` (ie. completed).
+
+Secondly we create an infinite loop (via `loop`, `recur`) to listen to data on the `data-ch` channel and transact each data item into our local DB, thus syncing the remote DB (repo) with the local DB. We also update the `:total` number of `:users` for each repo synced.
+Finally we reset the progress to `-1` to make it disappear (see `progress-bar` below) and setup a timeout to call the `listen-loop` every second.
+
+```cljs
+(defn- listen-loop []
+  (let [socket-ch (async/chan 1)
+        data-ch   (async/chan 10)
+        ajax-ch   (async/chan 1)
+        socket (ws/connect "/events"
+                 :on-open    #(async/put! socket-ch :open)
+                 :on-close   #(doseq [ch [socket-ch ajax-ch data-ch]]
+                                (async/close! ch))
+                 :on-message #(async/put! data-ch %))]
+    (go
+      (when (async/<! socket-ch) ;; open socket
+        (swap! app-state assoc :progress 0.3)
+        (u/ajax "/api/db/" (fn [datoms] (async/put! ajax-ch datoms) (swap! app-state assoc :progress 0.6)))
+        (let [[dump _] (async/alts! [ajax-ch (async/timeout 30000)])]
+          (when dump  ;; wait ajax
+            (profile "DB initialization"
+              (reset! conn (d/init-db dump schema))
+              (let [num-users (count (d/datoms @conn :aevt :user/name))
+                    num-datoms (count (:eavt @conn))
+                    num-achs (count (d/datoms @conn :aevt :ach/sha1))]
+                (println "Pushed [datoms:" num-datoms "] [users:" num-users "] [achievements:" num-achs "]")
+                (swap! app-state assoc
+                  :users {:total num-users :visible (min 30 num-users)}
+                  :first-load? false
+                  :progress 1)))
+            (loop []
+              (when-let [tx-data (async/<! data)]  ;; listen for socket
+                (try
+                  (d/transact! conn tx-data)
+                  (let [num-users (count (d/datoms @conn :aevt :user/name))]
+                    (swap! app-state assoc-in [:users :total] num-users))
+                  (catch js/Error e
+                    (.error js/console e)))
+                (recur))))
+          (.close socket)))
+     (swap! app-state assoc :progress -1)
+     (js/setTimeout listen-loop 1000))))
+```
+
+### Start
+
+The app is started by calling the public function `start`.
+We mount the `application` component on the `<body>` element, passing the `app-state` and the DB connection `conn`. We also set up a DOM listener to update the `:path` of `app-state` when we do page navigation.
+The `listen-loop` is started to listen on socket data.
+We also listen to the DB `conn` for changes to the transaction report `tx-report`. When a datom is added we set a timeout to retract it after 10 seconds.
+
+```cljs
+(defn ^:export start []
+  (rum/mount (application app-state conn) (.-body js/document))
+  (dom/listen-nav #(swap! app-state assoc :path %))
+
+  (listen-loop)
+
+  (d/listen! conn
+    (fn [tx-report]
+      (doseq [datom (:tx-data tx-report)
+              :when (and (= (.-a datom) :message/text)
+                         (.-added datom))]
+        (js/setTimeout (fn [] 
+                         (d/transact! conn [[:db.fn/retractEntity (.-e datom)]]))
+                       10000)))))
+```
+
 ## Views
 
 [Rum](https://github.com/tonsky/rum) is used as the React wrapper.
@@ -40,6 +124,8 @@ The `path` determines which page to show, one of either:
 - `index-page`
 - `user-page`
 - `repo-page`
+
+### Page
 
 Each page is wrapped in a `header` and `footer`.
 
