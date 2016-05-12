@@ -7,6 +7,7 @@
    * [Getting started](datascript_getting_started.md)
 * [Datomic](datomic.md)
    * [Datomic architecture](datomic_architecture.md)
+   * Getting started
 * [Datalog apps](datalog_apps.md)
    * [CRUD apps](crud_apps.md)
 * [Datalog frameworks](datalog_frameworks.md)
