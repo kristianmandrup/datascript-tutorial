@@ -9,4 +9,5 @@
 * [Dato framework](dato_framework.md)
 * [Datomic](datomic.md)
    * [Datomic architecture](datomic_architecture.md)
+* Datalog apps
 
