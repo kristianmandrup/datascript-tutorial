@@ -12,5 +12,5 @@
    * [CRUD apps](crud_apps.md)
 * [Datalog frameworks](datalog_frameworks.md)
    * [Dato framework](dato_framework.md)
-* Data modeling
+* [Data modeling](data_modeling.md)
 
