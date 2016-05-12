@@ -1,39 +1,11 @@
-# Developing apps with Datascript and Datomic
+## Catalysis
 
-I'm writing an Open Source book to make it easier to get started developing apps using Datomic and Datascript. Please assist in the effort if you have good material, time and/or experience with these databases. Thanks :)
+[Catalysis](https://github.com/metasoarous/catalysis) is a full stack micro framework which leverages datalog DBs on the client and server.
 
-- [Intro](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Intro.md)
-- [Why Datascript?](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Why Datascript.md)
-- [Datomic Architecture](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Datomic Architecture.md)
-- [Datascript Architecture](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Datascript Architecture.md)
-- [Datomic getting started](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Datomic getting started.md)
-- [Datascript getting started](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Datascript getting started.md)
-- [Create Schema](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Create Schema.md)
-- [Identity](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Identity.md)
-- [Create Database](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Create Database.md)
-- [Connect to Database](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Connect to Database.md)
-- [Transactions](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Connect to Database.md)
-- [Add data](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Add data.md)
-- [Retract data](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Retract data.md)
-- [Basic Queries](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Basic Queries.md)
-- [Advanced Queries](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Advanced Queries.md)
-- [Pull data](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Pull data.md)
-- [Time travel](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Time travel.md)
-- [CRUD](https://github.com/kristianmandrup/datascript-tutorial/blob/master/CRUD.md)
-- [Reagent app](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Reagent integration.md)
-- [Todo app](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Todo example.md)
-- [Acha Acha app](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Acha Acha app.md)
-- [Javascript integration](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Javascript integration.md)
-- [Javascript project config.md](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Javascript project config.md.md)
-- [Mori integration](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Mori integration.md)
-- [Posh and Reagent](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Posh and Reagent.md)
-- [Client/Server apps](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Client-Server apps.md)
-- [Client/Server data sync](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Client-Server data sync.md)
-- [Catalysis](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Catalysis.md)
-- [React Native](https://github.com/kristianmandrup/datascript-tutorial/blob/master/React Native.md)
-- [Dato framework](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Dato framework.md)
+    "The acceleration of a chemical reaction by a catalyst."
 
-## Appendix
+Currently it uses [datsync](https://github.com/metasoarous/datsync) to sync the Tx reports directly.
 
-- [ClojureScript](https://github.com/kristianmandrup/datascript-tutorial/blob/master/ClojureScript.md)
-- [Environment setup](https://github.com/kristianmandrup/datascript-tutorial/blob/master/Environment setup.md)
+We plan to extend catalysis further and make it more flexible, by allowing you to sync affected entities such that validation and security filters can be applied. This gives the app full control over which users get streamed which entities from the same underlying DB, ie. materialized views.
+
+Furthermore, a [datviews]() library is also in the works to help generate views based on the entity schemas. With [Web components](https://www.w3.org/standards/techs/components) and [CSS Grid layout](https://drafts.csswg.org/css-grid/) coming soon, we will finally have full control of the web layout.
