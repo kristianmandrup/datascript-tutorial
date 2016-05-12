@@ -8,5 +8,4 @@
 * [CRUD apps](crud_apps.md)
 * [Dato framework](dato_framework.md)
 * [Datomic](datomic.md)
-   * Datomic_architecture.md
 
