@@ -20,7 +20,7 @@
 * [Queries](queries.md)
    * [Basic Queries](basic_queries.md)
    * [Advanced Queries](advanced_queries.md)
-   * Pull data
+   * [Pull data](pull_data.md)
 * [Datascript in Javascript](datascript_in_javascript.md)
    * [API](javascript_api.md)
    * [Integration](javascript_integration.md)
