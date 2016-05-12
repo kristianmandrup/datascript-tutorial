@@ -23,5 +23,5 @@
 * [Datascript in Javascript](datascript_in_javascript.md)
    * [API](javascript_api.md)
    * [Integration](javascript_integration.md)
-   * Project configuration
+   * [Project configuration](project_configuration.md)
 
