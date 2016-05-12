@@ -22,5 +22,5 @@
    * [Advanced Queries](advanced_queries.md)
 * [Datascript in Javascript](datascript_in_javascript.md)
    * [API](javascript_api.md)
-   * Integration
+   * [Integration](javascript_integration.md)
 
