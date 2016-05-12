@@ -24,4 +24,5 @@
    * [API](javascript_api.md)
    * [Integration](javascript_integration.md)
    * [Project configuration](project_configuration.md)
+   * Mori integration
 
