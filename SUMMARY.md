@@ -20,4 +20,5 @@
 * [Queries](queries.md)
    * [Basic Queries](basic_queries.md)
    * [Advanced Queries](advanced_queries.md)
+* Datascript in Javascript
 
