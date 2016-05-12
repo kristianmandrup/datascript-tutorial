@@ -13,5 +13,5 @@
 * [Datalog frameworks](datalog_frameworks.md)
    * [Dato framework](dato_framework.md)
 * [Data modeling](data_modeling.md)
-   * Create Schema
+   * [Create Schema](create_schema.md)
 
