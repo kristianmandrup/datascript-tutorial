@@ -17,7 +17,7 @@
 * [Data modeling](data_modeling.md)
    * [Create Schema](create_schema.md)
    * [Add data](add_data.md)
-   * Retract data
+   * [Retract data](retract_data.md)
 * [Queries](queries.md)
    * [Basic Queries](basic_queries.md)
    * [Advanced Queries](advanced_queries.md)
