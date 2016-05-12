@@ -10,5 +10,5 @@
 * [Datomic](datomic.md)
    * [Datomic architecture](datomic_architecture.md)
 * [Datalog apps](datalog_apps.md)
-   * [CRUD apps](crud_apps.md)
+   * CRUD apps
 
