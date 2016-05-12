@@ -6,5 +6,5 @@
 * [Datascript architecture](datascript_architecture.md)
 * [Datascript getting started](datascript_getting_started.md)
 * [CRUD apps](crud_apps.md)
-* Dato framework
+* [Dato framework](dato_framework.md)
 
