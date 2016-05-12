@@ -21,4 +21,5 @@
    * [Basic Queries](basic_queries.md)
    * [Advanced Queries](advanced_queries.md)
 * [Datascript in Javascript](datascript_in_javascript.md)
+   * API
 
