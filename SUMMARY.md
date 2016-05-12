@@ -5,7 +5,7 @@
 * [Datascript](datascript.md)
    * [Architecture](datascript_architecture.md)
    * [Getting started](datascript_getting_started.md)
-   * Create Connection
+   * [Create Connection](create_connection.md)
 * [Datomic](datomic.md)
    * [Architecture](datomic_architecture.md)
    * [Getting started](datomic_getting_started.md)
