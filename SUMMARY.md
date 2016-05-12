@@ -4,7 +4,7 @@
 * [Entity identity](entity-identity.md)
 * [Datascript](datascript.md)
    * [Architecture](datascript_architecture.md)
-   * [Getting started](getting_started.md)
+   * [Getting started](datascript_getting_started.md)
 * [CRUD apps](crud_apps.md)
 * [Dato framework](dato_framework.md)
 * [Datomic](datomic.md)
