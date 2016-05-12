@@ -14,6 +14,7 @@
    * [Dato framework](dato_framework.md)
 * [Data modeling](data_modeling.md)
    * [Create Schema](create_schema.md)
+   * Add data
 * [Queries](queries.md)
    * [Basic Queries](basic_queries.md)
    * [Advanced Queries](advanced_queries.md)
