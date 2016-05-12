@@ -2,5 +2,5 @@
 
 * [Introduction](README.md)
 * [Entity identity](entity-identity.md)
-* CRUD apps
+* [CRUD apps](crud_apps.md)
 
