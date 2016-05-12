@@ -16,4 +16,5 @@
    * [Create Schema](create_schema.md)
 * [Queries](queries.md)
    * [Basic Queries](basic_queries.md)
+   * Advanced Queries
 
