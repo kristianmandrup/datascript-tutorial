@@ -107,6 +107,7 @@ We now create some filter functions.
 (defn filter-terms [db]
   (not-empty
     (str/split (system-attr db :system/filter) #"\s+")))
+```
 
 The `filtered-db` function filters a given db by the terms from `filter-terms` crating a whitelist via
 
