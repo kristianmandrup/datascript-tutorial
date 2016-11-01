@@ -84,7 +84,7 @@ A full `project.clj` file for a datascript only app would look like this.
                [(< ?a ?min-age)]])
 
 ;; execute query: q-young, passing 18 as min-age
-(d/q q-young 18)
+(d/q q-young @conn 18)
 
 ;; Query Result
 ;; => [["Sally"]]
