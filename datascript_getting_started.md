@@ -77,8 +77,8 @@ A full `project.clj` file for a datascript only app would look like this.
 
 ;;; Query to find names for entities (people) whose age is less than 18
 (def q-young '[:find ?n
-               :where
                :in ?min-age
+               :where
                [?e :name ?n]
                [?e :age ?a]
                [(< ?a ?min-age)]])
