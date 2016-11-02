@@ -42,13 +42,6 @@ The following query finds all entity-ids that have the attribute `:person/name`w
  [?e :person/name "Ridley Scott"]]
 ```
 
-### Datomic Architecture
-
-
-
-### Datascript Architecture
-
-
 ### Useful resources
 
 [Learn datalog queries](http://www.learndatalogtoday.org/)
