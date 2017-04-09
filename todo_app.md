@@ -234,7 +234,7 @@ Finally we call `clean-todo` to reset the form.
                       (u/remove-vals nil?))]
       (d/transact! conn (concat project-tx [entity])))
     (clean-todo)))
-```
+```    
 
 ## Rum: React components
 
