@@ -61,7 +61,7 @@ A full `project.clj` file for a datascript only app would look like this.
 
 ```clojure
 (ns my-app.core
-  (:require [datascript :as d]
+  (:require [datascript.core :as d]
             ;; more libs...
             ))
 
