@@ -36,9 +36,17 @@ Where `entity-id` is either the lookup reference, like `[:person/email 'hans.gru
 
 ### Delete
 
-Datascript/Datomic use `retract` to delete an entity by *entity id* (or *lookup reference* as for *Create*).
+Datascript/Datomic use `:db.fn/retractEntity` to delete an entity by *entity id* (or *lookup reference* as for *Create*).
 
-`(d/transact! conn [{ :db/retract entity-id }])`
+`(d/transact! conn [[:db.fn/retractEntity entity-id]])`
+
+Datascript/Datomic use `:db/retract` to delete an entity value by *entity id* (or *lookup reference* as for *Create*).
+
+`(d/transact! conn [[:db.fn/retract entity-id :person/name]])`
+
+optionally, you can specify the value that you want retract (it may be helpfull to avoid race conditions)
+
+`(d/transact! conn [[:db.fn/retract entity-id :person/name "Hans Gruber"]])`
 
 ### Read
 
