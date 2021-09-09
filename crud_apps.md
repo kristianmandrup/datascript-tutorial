@@ -26,10 +26,10 @@ Datascript/Datomic create and update entity data via "upserts" (update or insert
 Add (upsert) attributes to existing entity as follows:
 
 ```clj
-(d/transact! conn [{
+(d/transact! conn [[
     :db/add entity-id
     :person/email 'hans.gruber@gmail.com'
-    :person/name 'Hans Gruber' }])
+    :person/name 'Hans Gruber' ]])
 ```
 
 Where `entity-id` is either the lookup reference, like `[:person/email 'hans.gruber@gmail.com']` or the id itself, like `17353235`.
