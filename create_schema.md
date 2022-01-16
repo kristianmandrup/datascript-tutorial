@@ -82,7 +82,7 @@ refer to multiple values.
 Notice that `:aka` doesn't have a value type as required by Datomic. This is because we are in Javascript land and things are a bit more flexible and "type less" ;) You can still add the value type if you like!
 
 Datomic uses a special attribute `:db/ident` to identify attributes.
-In this (Dartomic) example we define an attribute named `:person/name` of type `:db.type/string` with `:db.cardinality/one` that is intended to capture a person's name.
+In this (Datomic) example we define an attribute named `:person/name` of type `:db.type/string` with `:db.cardinality/one` that is intended to capture a person's name.
 
 ```clojure
 {:db/id #db/id[:db.part/db]
